@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
-    private Rigidbody rigidbody;
+    private Rigidbody _rigidbody;
     private PlayerConditionController playerConditionController;
 
     [Header("Move")]
@@ -22,7 +22,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        _rigidbody = GetComponent<Rigidbody>();
         playerConditionController = GetComponent<PlayerConditionController>();
     }
 
@@ -48,9 +48,9 @@ public class PlayerMovementController : MonoBehaviour
         Vector3 direction = transform.forward * inputVector.y + transform.right * inputVector.x;
         direction *= moveSpeed;
         // 상하 움직임(점프) 반영
-        direction.y = rigidbody.velocity.y;
+        direction.y = _rigidbody.velocity.y;
         // 움직임 적용
-        rigidbody.velocity = direction;
+        _rigidbody.velocity = direction;
     }
 
     // 플레이어 회전
@@ -70,7 +70,7 @@ public class PlayerMovementController : MonoBehaviour
         float staminaUsedForJump = 10f; // 스태미나 감소량
 
         // 점프
-        rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+        _rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
         // 스태미나 감소
         playerConditionController.UseStamina(staminaUsedForJump);
     }
