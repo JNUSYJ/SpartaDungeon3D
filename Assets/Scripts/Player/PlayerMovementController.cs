@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Assertions.Comparers;
 using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
@@ -16,6 +17,10 @@ public class PlayerMovementController : MonoBehaviour
     public float lookSensivity;         // 회전 감도
     private float camCurXRot;           // 카메라 X축 회전값
     private Vector2 mouseDelta;         // 마우스 입력 벡터
+    private float sinTheta;             // Sin값
+    private float cosTheta;             // Cos값
+    public float radius;                // 카메라 회전 반지름
+    public float playerHeight;          // 플레이어 키
 
     [Header("Jump")]
     public LayerMask groundLayerMask;   // 지면 레이어마스크
@@ -60,6 +65,12 @@ public class PlayerMovementController : MonoBehaviour
         camCurXRot += mouseDelta.y * lookSensivity;
         camCurXRot = Mathf.Clamp(camCurXRot, -85, 85);
         cameraContainer.localEulerAngles = new Vector3(-camCurXRot, 0, 0);
+        // 카메라 상하 움직임
+        sinTheta = -Mathf.Sin(camCurXRot * Mathf.Deg2Rad);
+        cosTheta = -Mathf.Cos(camCurXRot * Mathf.Deg2Rad);
+        float y = sinTheta * radius + playerHeight;
+        float z = cosTheta * radius;
+        cameraContainer.transform.localPosition = new Vector3(0, y, z);
         // 플레이어 좌우 회전
         transform.eulerAngles += new Vector3(0, mouseDelta.x * lookSensivity);
     }
