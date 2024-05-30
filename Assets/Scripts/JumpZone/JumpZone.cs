@@ -12,6 +12,7 @@ public class JumpZone : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
+        // 플레이어 충돌 시 강하게 점프
         if (other.gameObject.CompareTag("Player"))
         {
             _rigidbody = other.GetComponent<Rigidbody>();
