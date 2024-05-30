@@ -25,6 +25,10 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Jump")]
     public LayerMask groundLayerMask;   // 지면 레이어마스크
 
+    [Header("Climbing")]
+    public LayerMask wallLayerMask;     // 벽 레이어마스크
+    private bool IsClimbing;            // 벽 오르기 중 여부
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -39,6 +43,11 @@ public class PlayerMovementController : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
+
+        if (IsClimbing && IsNextToWall())
+        {
+            Climb();
+        }
     }
 
     private void LateUpdate()
@@ -100,11 +109,33 @@ public class PlayerMovementController : MonoBehaviour
 
         for (int i = 0; i < rays.Length; i++)
         {
-            if (Physics.Raycast(rays[i], 1.5f, groundLayerMask))
+            if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
             {
                 return true;
             }
         }
+        return false;
+    }
+
+    // 벽 오르기
+    public void Climb()
+    {
+        Vector3 direction = _rigidbody.velocity;
+        direction.y = moveSpeed;
+        _rigidbody.velocity = direction;
+    }
+
+    // 벽에 가까이 있는지 검사
+    private bool IsNextToWall()
+    {
+        // 레이캐스트로 벽 검사
+        Ray ray = new Ray(transform.position + transform.up * playerHeight, transform.forward);
+
+        if (Physics.Raycast(ray, 1f, wallLayerMask))
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -115,10 +146,12 @@ public class PlayerMovementController : MonoBehaviour
         if (context.phase == InputActionPhase.Performed)
         {
             inputVector = context.ReadValue<Vector2>();
+            IsClimbing = true;
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
             inputVector = Vector2.zero;
+            IsClimbing = false;
         }
     }
 
