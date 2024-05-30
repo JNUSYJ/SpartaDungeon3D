@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: Platform1
   m_EditorClassIdentifier: 
   destination:
-  - {x: 8, y: 0, z: 27}
-  - {x: 5, y: 0, z: 27}
+  - {x: 10, y: 0, z: 27}
+  - {x: 10, y: 10, z: 27}
+  - {x: -10, y: 10, z: 27}
+  - {x: -10, y: 0, z: 27}
   moveSpeed:
-  - 1
-  - 1
+  - 10
+  - 5
+  - 5
+  - 10

@@ -26,11 +26,15 @@ public class Platform : MonoBehaviour
         moveSpeed = platformSO.moveSpeed[0];
     }
 
+    private void Update()
+    {
+        ArrivedCheck();                 // 목적지 도착 체크
+    }
+
     private void FixedUpdate()
     {
         moveDirection = SetDirection(); // 방향 설정
         Move(moveDirection);            // 이동
-        ArrivedCheck();                 // 목적지 도착 체크
     }
 
     // 목적지 도착 체크
